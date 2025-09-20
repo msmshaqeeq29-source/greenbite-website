@@ -1,0 +1,737 @@
+html, body {
+  height: 100%;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+main {
+  flex: 1; /* pushes footer to bottom if content is short */
+}
+
+footer {
+  background: #2f8f4f;
+  color: white;
+  text-align: center;
+  padding: 1px;
+  margin-top: 100px; /* ensures footer sits at bottom */
+ 
+}
+
+.calculator-page {
+  max-width: 600px;
+  margin: auto;
+  padding: 1rem;
+  background-color:#ccc;
+  
+}
+
+#calcResults {
+  margin-top: 1rem;
+  padding: 1rem;
+  border: 1px solid #ccc;
+  background: #f9f9f9;
+}
+
+.exercise {
+  border: 1px solid #ccc;
+  padding: 10px;
+  margin: 10px 0;
+}
+
+.circle {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  margin: 20px auto;
+  background: rgba(0, 128, 0, 0.2);
+  animation: breathe 8s ease-in-out infinite;
+}
+
+@keyframes breathe {
+  0%   { transform: scale(1); }
+  50%  { transform: scale(1.6); }
+  100% { transform: scale(1); }
+}
+
+
+.faq-answer {
+  max-height: 0;
+  overflow: hidden;
+  background: #f9f9f9;
+  border-radius: 6px;
+  padding: 0 0.6rem;
+  transition: max-height 0.4s ease;
+}
+.faq-question.active + .faq-answer {
+  padding: 0.6rem;
+}
+
+
+
+/* ---------- Variables & base container ---------- */
+
+:root{
+  --green:#2f8f4f;
+  --white:#ffffff;
+  --text:#222;
+}
+
+/* base container */
+.container{ max-width:1100px; margin:0 auto; padding:0 1rem; }
+
+/* site nav */
+.site-nav{ background:var(--green); color:var(--white); position:relative; z-index:1000; }
+.site-nav .nav-inner{ display:flex; align-items:center; justify-content:space-between; height:64px; }
+.site-nav .logo{ color:var(--white); text-decoration:none; font-weight:700; font-size:1.15rem; }
+
+/* desktop horizontal menu */
+.nav-list{ display:flex; gap:.75rem; list-style:none; margin:0; padding:0; align-items:center; }
+.nav-list li a{ color:var(--white); text-decoration:none; padding:.5rem .65rem; border-radius:6px; transition:background .15s; }
+.nav-list li a:hover{ background: rgba(255,255,255,0.12); }
+
+/* hamburger icon (hidden on desktop) */
+.nav-toggle{ display:none; background:transparent; border:0; cursor:pointer; padding:.5rem; }
+.hamburger{ display:block; width:22px; height:2px; background:var(--white); position:relative; }
+.hamburger::before, .hamburger::after{ content:""; position:absolute; left:0; width:22px; height:2px; background:var(--white); transition: transform .3s, opacity .2s; }
+.hamburger::before{ top:-7px; } .hamburger::after{ top:7px; }
+
+
+
+/* daily tip card */
+.tip-card{ background:#e8f8ec; border-left:6px solid var(--green); padding:1rem; border-radius:8px; box-shadow:0 4px 10px rgba(0,0,0,0.05); }
+
+/* ===== MOBILE: collapse nav into slide in panel ===== */
+@media (max-width:768px){
+  .nav-toggle{ display:block; color:var(--white); }
+  .nav-list{
+    position:fixed; top:0; right:0; height:100vh; width:260px; max-width:80%;
+    background:var(--white); color:var(--text); flex-direction:column; padding-top:4rem;
+    transform: translateX(100%); transition: transform .28s;
+    box-shadow: -8px 0 24px rgba(0,0,0,.12);
+  }
+  .nav-list li a{ color:var(--text); padding:1rem; display:block; }
+  /* when nav open, slide in */
+  .site-nav.open .nav-list{ transform: translateX(0); }
+  /* hamburger -> X */
+  .site-nav.open .hamburger{ background:transparent; }
+  .site-nav.open .hamburger::before{ transform: translateY(7px) rotate(45deg); }
+  .site-nav.open .hamburger::after{ transform: translateY(-7px) rotate(-45deg); }
+  body.nav-open{ overflow:hidden; } /* disable background scroll while menu open */
+}
+
+/* small accessibility focus styling */
+.nav-list li a:focus{ outline:2px dashed rgba(255,255,255,0.6); outline-offset:3px; }
+
+
+/* Basic responsive scaffolding */
+.main { padding: 2rem 0; }
+@media (min-width: 769px){
+  /* example grid for two-column sections on larger screens */
+  .two-col {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.25rem;
+    align-items:start;
+  }
+}
+@media (max-width:768px){
+  .nav-list {
+    position: fixed;
+    top: 0;
+    right: 0;
+    height: 100vh;
+    width: 260px;
+    max-width: 80%;
+    background: #ffffff;
+    color: #222;
+    flex-direction: column;
+    padding-top: 4rem;
+    transform: translateX(100%);
+    transition: transform .28s ease-in-out;
+    box-shadow: -8px 0 24px rgba(0,0,0,.12);
+  }
+
+  .nav-list li {
+    width: 100%;
+  }
+
+  .nav-list li a {
+    display: block;
+    width: 100%;
+    padding: 1rem;
+    color: #222;
+    text-decoration: none;
+    border-radius: 0; /* remove round corners */
+    transition: background-color 0.3s, color 0.3s;
+  }
+
+  /* Hover / tap effect */
+  .nav-list li a:hover,
+  .nav-list li a:focus {
+    background-color: #2f8f4f;
+    color: white;
+  }
+}
+
+
+/* Recipe cards */
+.recipe-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1rem;
+  margin-top: 1.5rem;
+}
+.recipe-card {
+  background: #fff;
+  border-radius: 10px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  overflow: hidden;
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+.recipe-card img {
+  width: 100%;
+  height: 140px;
+  object-fit: cover;
+}
+.recipe-card h3 {
+  margin: 0.5rem;
+}
+.recipe-card p {
+  margin: 0 0.5rem 1rem;
+  color: #666;
+}
+.recipe-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 6px 16px rgba(0,0,0,0.15);
+}
+
+/* Modal styling */
+.modal {
+  display: none;
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  background: rgba(0,0,0,0.6);
+  z-index: 2000;
+  justify-content: center;
+  align-items: center;
+}
+.modal-content {
+  background: #fff;
+  padding: 1rem 2rem;
+  border-radius: 10px;
+  max-width: 600px;
+  max-height: 80vh;
+  overflow-y: auto;
+  position: relative;
+}
+#closeModal {
+  position: absolute;
+  top: 10px; right: 15px;
+  font-size: 1.5rem;
+  cursor: pointer;
+}
+.modal-content img {
+  width: 100%;
+  border-radius: 6px;
+  margin-bottom: 1rem;
+}
+
+/* Nutrition table */
+.nutrition-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 0.5rem;
+}
+.nutrition-table th,
+.nutrition-table td {
+  border: 1px solid #ddd;
+  padding: 8px;
+  text-align: left;
+}
+.nutrition-table th {
+  background: #f0f0f0;
+}
+
+
+/* Calculator form */
+.calc-form {
+  background: #f9f9f9;
+  padding: 1rem;
+  border-radius: 8px;
+  margin-bottom: 1rem;
+}
+.calc-form label {
+  display: block;
+  margin: 0.5rem 0;
+}
+.calc-form input,
+.calc-form select,
+.calc-form button {
+  padding: 0.4rem;
+  margin-top: 0.3rem;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+.calc-form button {
+  background: #2f8f4f;
+  color: white;
+  border: none;
+  cursor: pointer;
+  margin-top: 0.6rem;
+}
+.calc-form button:hover {
+  background: #26753f;
+}
+
+/* Results card */
+.results-card {
+  background: white;
+  border-radius: 10px;
+  padding: 1rem;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+.results-card h2 {
+  margin-top: 0;
+}
+
+/* Macro table */
+.macro-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 1rem;
+}
+.macro-table th,
+.macro-table td {
+  border: 1px solid #ddd;
+  padding: 8px;
+  text-align: center;
+}
+.macro-table th {
+  background: #f0f0f0;
+}
+
+/* Workout form */
+.workout-form {
+  background: #f9f9f9;
+  padding: 1rem;
+  border-radius: 8px;
+  margin-bottom: 1rem;
+}
+.workout-form select,
+.workout-form button {
+  margin-top: 0.3rem;
+  padding: 0.4rem;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+}
+.workout-form button {
+  background: #2f8f4f;
+  color: white;
+  border: none;
+  cursor: pointer;
+}
+.workout-form button:hover {
+  background: #26753f;
+}
+
+/* Workout cards */
+.workout-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 1rem;
+}
+.workout-card {
+  background: #fff;
+  border-radius: 10px;
+  padding: 1rem;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  text-align: center;
+  transition: transform 0.2s ease;
+}
+.workout-card:hover {
+  transform: translateY(-5px);
+}
+.workout-card button {
+  margin-top: 0.5rem;
+  padding: 0.4rem 0.8rem;
+  background: #2f8f4f;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+.workout-card button:hover {
+  background: #26753f;
+}
+
+/* Timer */
+.timer-display {
+  margin-top: 0.5rem;
+  font-size: 1.2rem;
+  font-weight: bold;
+}
+
+/* Breathing circle */
+.breathing-exercise {
+  text-align: center;
+  margin: 2rem 0;
+}
+.breathing-circle {
+  width: 120px;
+  height: 120px;
+  margin: 0 auto;
+  border-radius: 50%;
+  background: radial-gradient(circle, #6ccf7d, #2f8f4f);
+  box-shadow: 0 0 20px rgba(47,143,79,0.6);
+  transition: transform 4s ease-in-out, box-shadow 4s ease-in-out;
+}
+.breathing-circle.expand {
+  transform: scale(1.3);
+  box-shadow: 0 0 40px rgba(47,143,79,0.9);
+}
+.breathing-circle.shrink {
+  transform: scale(0.8);
+  box-shadow: 0 0 10px rgba(47,143,79,0.4);
+}
+#breathingText {
+  margin-top: 1rem;
+  font-size: 1.2rem;
+  font-weight: bold;
+}
+
+/* Timer display */
+.timer-display {
+  font-size: 2rem;
+  font-weight: bold;
+  margin-top: 1rem;
+  text-align: center;
+  background: black;
+  color: limegreen;
+  padding: 0.5rem 1rem;
+  border-radius: 6px;
+  width: fit-content;
+  margin-left: auto;
+  margin-right: auto;
+  font-family: "Courier New", monospace;
+}
+
+/* Sound button */
+.sound-btn {
+  display: block;
+  margin: 1rem auto;
+  padding: 0.6rem 1.2rem;
+  border: none;
+  background: #2f8f4f;
+  color: white;
+  font-size: 1rem;
+  border-radius: 6px;
+  cursor: pointer;
+}
+.sound-btn:hover {
+  background: #26753f;
+}
+
+/* Contact form */
+.contact-form {
+  background: #f9f9f9;
+  padding: 1rem;
+  border-radius: 8px;
+  margin-bottom: 1rem;
+}
+.contact-form label {
+  display: block;
+  margin: 0.5rem 0;
+}
+.contact-form input,
+.contact-form textarea {
+  width: 100%;
+  padding: 0.5rem;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+}
+.contact-form button {
+  background: #2f8f4f;
+  color: white;
+  padding: 0.5rem 1rem;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+}
+.contact-form button:hover {
+  background: #26753f;
+}
+
+/* Feedback history */
+.feedback-history {
+  margin-top: 1rem;
+}
+.feedback-item {
+  background: white;
+  border-radius: 8px;
+  padding: 0.6rem;
+  margin-bottom: 0.5rem;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+.feedback-item small {
+  color: #666;
+}
+
+/* FAQ */
+.faq-section {
+  margin-top: 2rem;
+}
+.faq-question {
+  width: 100%;
+  text-align: left;
+  padding: 0.6rem;
+  font-size: 1rem;
+  border: none;
+  background: #eee;
+  border-radius: 6px;
+  cursor: pointer;
+  margin-bottom: 0.3rem;
+  transition: background 0.3s;
+}
+.faq-question.active {
+  background: #2f8f4f;
+  color: white;
+}
+.faq-answer {
+  max-height: 0;
+  overflow: hidden;
+  background: #f9f9f9;
+  border-radius: 6px;
+  padding: 0 0.6rem;
+  transition: max-height 0.4s ease;
+}
+.faq-answer p {
+  margin: 0.6rem 0;
+}
+
+/* Map */
+.map-section iframe {
+  border-radius: 8px;
+  width: 100%;
+  height: 300px;
+}
+
+/* Map Section */
+.map-section {
+  margin: 2rem 0;
+}
+
+.map-section h2 {
+  text-align: center;
+  margin-bottom: 1rem;
+  color: #2f8f4f;
+}
+
+.map-container {
+  position: relative;
+  overflow: hidden;
+  border-radius: 12px;
+  box-shadow: 0 6px 16px rgba(0,0,0,0.15);
+  height: 350px; /* fixed height for consistency */
+}
+
+.map-container iframe {
+  width: 100%;
+  height: 100%;
+  border: 0;
+}
+
+@media (max-width: 600px) {
+  .map-container {
+    height: 250px;
+  }
+}
+
+/* About Section */
+.about-section {
+  margin: 2rem 0;
+  text-align: center;
+}
+.about-section p {
+  max-width: 700px;
+  margin: 0 auto;
+  line-height: 1.6;
+  color: #444;
+}
+
+/* Quick Links Section */
+.quick-links {
+  margin: 2.5rem 0;
+}
+.quick-links h2 {
+  text-align: center;
+  margin-bottom: 1rem;
+}
+.links-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 1rem;
+}
+.link-card {
+  background: #fff;
+  border-radius: 10px;
+  text-align: center;
+  padding: 1rem;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+  text-decoration: none;
+  color: inherit;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+.link-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 6px 16px rgba(0,0,0,0.15);
+}
+.link-card h3 {
+  margin: 0.5rem 0;
+}
+.link-card p {
+  color: #666;
+  font-size: 0.9rem;
+}
+
+/* CTA Section */
+.cta-section {
+  text-align: center;
+  background: linear-gradient(135deg, #2f8f4f, #6ccf7d);
+  color: white;
+  padding: 2rem 1rem;
+  border-radius: 12px;
+  margin: 2.5rem 0;
+}
+.cta-btn {
+  display: inline-block;
+  margin-top: 1rem;
+  background: white;
+  color: #2f8f4f;
+  padding: 0.6rem 1.2rem;
+  border-radius: 6px;
+  font-weight: bold;
+  text-decoration: none;
+  transition: background 0.3s, color 0.3s;
+}
+.cta-btn:hover {
+  background: #e6e6e6;
+  color: #26753f;
+}
+
+/* Hero Section Enhancements */
+/* Hero Section */
+.hero {
+  height: 500px;
+  background: linear-gradient(rgba(255,255,255,0.4), rgba(255,255,255,0.4)),
+  url("../images/hero2.jpg") center/cover no-repeat;
+  
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  color: rgb(0, 0, 0);
+  padding: 1rem;
+  
+}
+
+
+.hero-text h1 {
+  font-size: 2.8px;
+  margin: 0;
+}
+
+.hero-text p#slogan {
+  font-size: 35px;
+  margin-top: 0.5rem;
+  font-style: italic;
+  font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+
+  
+}
+
+.hero-sub {
+  margin-top: 0.8rem;
+  font-size: 25px;
+  line-height: 1.5;
+  max-width: 600px;
+  margin-left: auto;
+  margin-right: auto;
+  color: #000000;
+  font-family: Arial, Helvetica, sans-serif;  
+}
+
+.hero-btn {
+  display: inline-block;
+  margin-top: 1.2rem;
+  padding: 0.7rem 1.4rem;
+  background: #2f8f4f;
+  color: rgb(255, 255, 255);
+  text-decoration: none;
+  font-weight: bold;
+  border-radius: 6px;
+  transition: background 0.3s;
+}
+.hero-btn:hover {
+  background: #26753f;
+}
+
+/* Mindfulness Cards */
+.mind-card {
+  background: #fff;
+  border-radius: 12px;
+  padding: 1.5rem;
+  margin: 1.5rem 0;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+.mind-card h2 {
+  margin-top: 0;
+  color: #2f8f4f;
+  text-align: center;
+}
+
+.mind-card p {
+  text-align: center;
+  color: #444;
+}
+
+.mind-card input, 
+.mind-card select, 
+.mind-card button {
+  display: block;
+  margin: 0.6rem auto;
+  padding: 0.5rem 1rem;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+}
+
+.mind-card button {
+  background: #2f8f4f;
+  color: white;
+  cursor: pointer;
+  border: none;
+  transition: background 0.3s;
+}
+.mind-card button:hover {
+  background: #26753f;
+}
+
+/* Logo styling */
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;  /* space between logo and text */
+  color: var(--white);
+  text-decoration: none;
+  
+}
+
+.logo img {
+  margin-top: 15px;
+  height: 80px;   /* adjust size */
+  width: auto;
+  display: block;
+}
