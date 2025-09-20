@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>GreenBite - Workout Generator</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  
+<header>
+  <nav class="site-nav" aria-label="Main navigation">
+    <div class="container nav-inner">
+      <a href="index.html" class="logo">
+      <img src="images/logo5.png" alt="GreenBite Logo">
+      <span>GreenBite</span>
+      </a>
+
+      <!-- Hamburger button -->
+      <button id="nav-toggle"
+              class="nav-toggle"
+              aria-controls="nav-list"
+              aria-expanded="false"
+              aria-label="Open menu">
+        <span class="hamburger" aria-hidden="true"></span>
+      </button>
+
+      <!-- Navigation links -->
+      <ul id="nav-list" class="nav-list">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="recipes.html">Recipes</a></li>
+        <li><a href="calculator.html">Calculator</a></li>
+        <li><a href="workout.html">Workout</a></li>
+        <li><a href="mindfulness.html">Mindfulness</a></li>
+        <li><a href="contact.html">Contact</a></li>
+      </ul>
+    </div>
+  </nav>
+</header>
+
+
+  <main>
+  <section class="workout-page container">
+    <h1>Workout Generator</h1>
+
+    <form id="workoutForm" class="workout-form">
+      <label>Choose body part:
+        <select id="bodyPart">
+          <option value="full">Full Body</option>
+          <option value="arms">Arms</option>
+          <option value="legs">Legs</option>
+        </select>
+      </label><br>
+
+      <label>Choose equipment:
+        <select id="equipment">
+          <option value="none">No Equipment</option>
+          <option value="dumbbells">Dumbbells</option>
+          <option value="resistance band">Resistance Bands</option>
+          <option value="kettlebell">Kettlebell</option>
+          <option value="mat">Mat</option>
+        </select>
+      </label><br>
+
+      <button type="submit">Generate Workout</button>
+    </form>
+
+    <!-- Container for workout plan -->
+    <div id="workoutPlan" class="workout-container"></div>
+  </section>
+</main>
+
+
+  <footer>
+    
+    <div class="newsletter">
+    <h3>Join Our Newsletter</h3>
+    <form id="newsletterForm">
+      <label for="newsletterEmail">Email Address:</label>
+      <input type="email" id="newsletterEmail" placeholder="Enter your email" required>
+      <button type="submit">Subscribe</button>
+    </form>
+    <p id="newsletterMsg"></p>
+  </div>
+  <p>&copy; 2025 GreenBite. All rights reserved.</p>
+  </footer>
+
+  <script src="js/app.js"></script>
+  <script src="js/workout.js"></script>
+</body>
+</html>
